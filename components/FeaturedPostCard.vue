@@ -33,7 +33,6 @@ defineProps({
           </p>
         </div>
       </div>
-      <!-- <span class="cursor-pointer absolute w-full h-full" ></span> -->
     </NuxtLink>
   </div>
 </template>

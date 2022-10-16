@@ -7,12 +7,13 @@ useHead({
 })
 
 const { data: posts } = useLazyAsyncData('posts-home', getHomePosts)
+refreshNuxtData('posts-home')
 </script>
 
 <template>
   <main class="grid grid-cols-1 lg:grid-cols-12 gap-12">
     <div class="lg:col-span-8 col-span-1">
-      <template v-for="post in posts.result['postsConnection']['edges']" :key="post.id">
+      <template v-if="posts.result" v-for="post in posts.result['postsConnection']['edges']" :key="post.id">
         <PostCard :post="(post.node as post)" />
       </template>
     </div>
@@ -24,5 +25,3 @@ const { data: posts } = useLazyAsyncData('posts-home', getHomePosts)
     </div>
   </main>
 </template>
-
-<style lang="scss" scoped></style>

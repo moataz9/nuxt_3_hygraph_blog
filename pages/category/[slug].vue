@@ -1,11 +1,14 @@
 <script setup lang="ts">
 const route = useRoute()
+let slug = route.params.slug as string
+useHead({
+  title: slug
+})
 </script>
 
 <template>
   <div>
     <h1>
-      how are you moataz,
       {{ route.params.slug }}
     </h1>
   </div>
