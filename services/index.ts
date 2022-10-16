@@ -38,6 +38,36 @@ export const getHomePosts = async () => {
   return useQuery(query)
 }
 
+export const getCategoryPosts = async (slug: string) => {
+  const query = gql`
+    query getCategoryPosts($slug: String!) {
+      postsConnection(where: { categories_some: { slug: $slug } }) {
+        edges {
+          node {
+            id
+            author {
+              bio
+              id
+              name
+              photo {
+                url
+              }
+            }
+            createdAt
+            slug
+            title
+            excerpt
+            featuredImage {
+              url
+            }
+          }
+        }
+      }
+    }
+  `
+  return useQuery(query, { slug })
+}
+
 export const getCategories = async () => {
   const query = gql`
     query getCategories {
