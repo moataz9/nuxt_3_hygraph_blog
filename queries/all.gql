@@ -121,3 +121,28 @@ query getFeaturedPosts {
     createdAt
   }
 }
+
+query getCategoryPosts($slug: String!) {
+  postsConnection(where: { categories_some: { slug: $slug } }) {
+    edges {
+      node {
+        id
+        author {
+          bio
+          id
+          name
+          photo {
+            url
+          }
+        }
+        createdAt
+        slug
+        title
+        excerpt
+        featuredImage {
+          url
+        }
+      }
+    }
+  }
+}
