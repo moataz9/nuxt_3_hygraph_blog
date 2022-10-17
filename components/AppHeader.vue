@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { getCategories } from '@@/services'
-const { data: categoriesData, pending } = await useLazyAsyncData('categories', getCategories)
+const { data: categoriesData, pending } = await useAsyncGql('getCategories')
 </script>
 
 <template>
@@ -13,7 +12,7 @@ const { data: categoriesData, pending } = await useLazyAsyncData('categories', g
       </div>
       <div class="hidden md:float-left md:contents" v-if="!pending">
         <NuxtLink
-          v-for="category in categoriesData.result['categories']"
+          v-for="category in categoriesData['categories']"
           :key="category.id"
           :to="{ name: 'category-slug', params: { slug: category.slug } }"
         >

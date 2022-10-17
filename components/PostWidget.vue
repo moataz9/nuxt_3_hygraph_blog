@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { post } from '@/types'
 import type { PropType } from 'vue'
-import { getSimilarPosts, getRecentPosts } from '@/services'
 import moment from 'moment'
 
 const { slug, categoriesNames } = defineProps({
@@ -10,23 +9,18 @@ const { slug, categoriesNames } = defineProps({
 })
 
 const relatedPosts = ref<post[]>([])
-onMounted(() => {
-  if (slug) {
-    getSimilarPosts(categoriesNames, slug).then(({ result }) => {
-      watch(result, () => {
-        relatedPosts.value = result.value?.posts
-      })
-      relatedPosts.value = result.value?.posts
-    })
-  } else {
-    getRecentPosts().then(({ result }) => {
-      watch(result, () => {
-        relatedPosts.value = result.value?.posts
-      })
-      relatedPosts.value = result.value?.posts
-    })
-  }
-})
+if (slug) {
+  // getSimilarPosts
+  const { data: similarPosts } = await useAsyncGql('getSimilarPosts', {
+    categories: categoriesNames,
+    slug,
+  })
+  relatedPosts.value = similarPosts.value.posts as post[]
+} else {
+  // getRecentPosts
+  const { data: recentPosts } = await useAsyncGql('getRecentPosts')
+  relatedPosts.value = recentPosts.value.posts as post[]
+}
 </script>
 
 <template>

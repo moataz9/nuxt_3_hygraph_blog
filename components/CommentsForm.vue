@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { addComment } from '~~/services'
+// import { addComment } from '~~/services'
 
 const comment = ref('')
 const name = ref('')
@@ -30,9 +30,13 @@ const submitComment = async () => {
   }
 
   if (name.value.length && email.value.length && comment.value.length) {
-    const { mutate, onDone } = await addComment(name.value, email.value, comment.value, currentSlug)
-    mutate()
-    onDone(() => {
+    const { execute } = await useAsyncGql('createComment', {
+      name: name.value,
+      email: email.value,
+      comment: comment.value,
+      slug: currentSlug,
+    })
+    execute().then(() => {
       showSuccessMsg.value = true
       setTimeout(() => (showSuccessMsg.value = false), 3000)
     })

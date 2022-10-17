@@ -1,25 +1,23 @@
 <script setup lang="ts">
 import type { post } from '~~/types'
-import { getCategoryPosts } from '~~/services'
 
 const route = useRoute()
 let slug = route.params.slug as string
 useHead({
   title: slug,
 })
-const { data: posts } = useLazyAsyncData('category-posts', () => getCategoryPosts(slug))
-refreshNuxtData('category-posts')
+const { data: posts } = useLazyAsyncData('category-posts', () => GqlGetRecentPosts())
 </script>
 
 <template>
   <main class="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-12">
-    <div class="lg:col-span-8 col-span-1">
-      <template v-if="posts.result">
-        <template v-if="!posts.result['postsConnection']['edges']['length']">
+    <!-- <div class="lg:col-span-8 col-span-1">
+      <template v-if="posts">
+        <template v-if="!posts.categories.length">
           <h2 class="text-center text-xl text-white mt-3">No posts for that Category, We Will add some More, stay tuned</h2>
         </template>
-        <template v-for="post in posts.result['postsConnection']['edges']" :key="post.id">
-          <PostCard :post="(post.node as post)" />
+        <template v-for="post in posts.categories" :key="post.id">
+          <PostCard :post="(post as post)" />
         </template>
       </template>
     </div>
@@ -28,6 +26,6 @@ refreshNuxtData('category-posts')
         <PostWidget />
         <CategoriesWidget />
       </div>
-    </div>
+    </div> -->
   </main>
 </template>

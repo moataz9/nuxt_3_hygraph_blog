@@ -1,21 +1,8 @@
 <script setup lang="ts">
-// import type { post } from '@/types'
-// import { onMounted, ref, watch } from 'vue'
+import type { post } from '~~/types';
 import { Carousel, Navigation, Slide } from 'vue3-carousel'
-import { getFeaturedPosts } from '~~/services'
 
-// const featuredPosts = ref<post[]>([])
-
-// onMounted(() => {
-//   getFeaturedPosts().then(({ result }) => {
-//     watch(result, () => {
-//       featuredPosts.value = result.value?.posts
-//     })
-//     featuredPosts.value = result.value?.posts
-//   })
-// })
-const { data: featuredPosts, pending } = await useLazyAsyncData('featuredPosts', getFeaturedPosts)
-
+const { data: featuredPosts } = await useAsyncGql('getFeaturedPosts')
 
 const settings = ref({
   itemsToShow: 1,
@@ -51,12 +38,12 @@ const settings = ref({
 </script>
 
 <template>
-  <Carousel :settings="settings" class="mb-8" v-if="!pending">
-    <Slide v-for="post in featuredPosts.result['posts']" :key="post.id">
-      <FeaturedPostCard :post="post" />
+  <Carousel :settings="settings" class="mb-8">
+    <Slide v-for="post in featuredPosts['posts']" :key="post.id">
+      <FeaturedPostCard :post="(post as post)" />
     </Slide>
     <template #addons>
-      <Navigation v-if="featuredPosts.result['posts'].length > 3" />
+      <Navigation v-if="featuredPosts['posts'].length > 3" />
     </template>
   </Carousel>
 </template>

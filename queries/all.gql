@@ -1,0 +1,123 @@
+query getPosts {
+  postsConnection {
+    edges {
+      node {
+        id
+        author {
+          bio
+          id
+          name
+          photo {
+            url
+          }
+        }
+        createdAt
+        slug
+        title
+        excerpt
+        featuredImage {
+          url
+        }
+        categories {
+          name
+          slug
+        }
+      }
+    }
+  }
+}
+
+query getCategories {
+  categories {
+    id
+    name
+    slug
+  }
+}
+
+query getSimilarPosts($slug: String!, $categories: [String!]) {
+  posts(where: { slug_not: $slug, AND: { categories_some: { slug_in: $categories } } }, last: 3) {
+    id
+    title
+    createdAt
+    slug
+    featuredImage {
+      url
+    }
+  }
+}
+
+query getRecentPosts {
+  posts(orderBy: createdAt_ASC, last: 3) {
+    id
+    title
+    slug
+    createdAt
+    featuredImage {
+      url
+    }
+  }
+}
+
+query getPostContent($slug: String!) {
+  post(where: { slug: $slug }) {
+    author {
+      id
+      bio
+      name
+      photo {
+        url
+      }
+    }
+    createdAt
+    slug
+    title
+    excerpt
+    featuredImage {
+      url
+    }
+    categories {
+      id
+      name
+      slug
+    }
+    content {
+      json
+    }
+  }
+}
+
+mutation createComment($name: String!, $email: String!, $comment: String!, $slug: String!) {
+  createComment(
+    data: { name: $name, email: $email, comment: $comment, post: { connect: { slug: $slug } } }
+  ) {
+    id
+  }
+}
+
+query getComments($slug: String!) {
+  comments(where: { post: { slug: $slug } }) {
+    id
+    name
+    createdAt
+    comment
+  }
+}
+
+query getFeaturedPosts {
+  posts(where: { featuredPost: true }, last: 10) {
+    id
+    author {
+      name
+      photo {
+        url
+      }
+    }
+    featuredImage {
+      url
+    }
+    title
+    slug
+    createdAt
+  }
+}
