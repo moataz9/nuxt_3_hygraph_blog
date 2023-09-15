@@ -1,6 +1,6 @@
-# Nuxt 3 Minimal Starter
+# Nuxt 3 Hygraph CMS Blog
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+[CMS blog live](https://nuxt-3-hygraph-blog.netlify.app/).
 
 ## Setup
 
